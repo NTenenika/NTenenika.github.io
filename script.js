@@ -1,6 +1,6 @@
 const posts = [
-    {name: "Why CS is Better", file_name: "cs-is-better.html"},
-    {name: "How to get a Job in today's market", file_name: "job.html"},
+    {name: "About R.T. Parlor", file_name: "aboutus.html"},
+    {name: "Our Theological Works", file_name: "posts.html"},
 ];
 
 const blog_posts_div = document.getElementById("blog-posts");
