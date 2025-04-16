@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Lua",
+      "type": "shell",
+      "command": "C:\\Users\\niten\\Downloads\\lua-5.4.2_Win64_bin\\lua54.exe",
+      "args": ["${file}"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Love2D",
+      "type": "shell",
+      "command": "C:\\Users\\niten\\Downloads\\love-11.5-win64\\love-11.5-win64\\love.exe",
+      "args": ["${workspaceFolder}"],  // Use workspace folder to point to your game
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
