@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RT Parlor | Reformed Theology</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <!-- Font Awesome is needed for social media icons. Replace with your kit or use SVGs. -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> 
+    <style>
+        /* --- Base Styling & Color Palette --- */
+        :root {
+            --bg-dark-mahogany: #310e1a;
+            --panel-burgundy: #540c15;
+            --text-whiskey-brown: #6f4f29;
+            --accent-gold: #fdce66;
+            --paper-ivory: #f4f8d3;
+            --hover-red: #a3200f;
+            --text-ivory: #f4f8d3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--bg-dark-mahogany);
+            color: var(--text-ivory);
+            display: flex;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-gold);
+            line-height: 1.2;
+        }
+
+        p {
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            background-color: var(--panel-burgundy);
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #4a0a12;
+            overflow-y: auto;
+            z-index: 999;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .sidebar-header .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-style: italic;
+            color: var(--accent-gold);
+            cursor: pointer;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background-color: var(--hover-red);
+            color: var(--paper-ivory);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .social-media a {
+            margin: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* --- Main Content Area --- */
+        .main-content {
+            margin-left: 250px;
+            padding: 3rem;
+            width: calc(100% - 250px);
+        }
+
+        .page {
+            display: none; /* Hide all pages by default */
+        }
+
+        .page.active {
+            display: block; /* Show only the active page */
+        }
+
+        /* --- Reusable Components --- */
+        .content-box {
+            background-color: rgba(84, 12, 21, 0.5); /* Semi-transparent burgundy */
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #4a0a12;
+        }
+
+        .content-box h2 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--accent-gold);
+            padding-bottom: 0.5rem;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(49, 14, 26, 0.8), rgba(49, 14, 26, 0.8)), url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            padding: 4rem 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--paper-ivory);
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 1rem auto 0;
+            color: var(--text-ivory);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-gold);
+            color: var(--bg-dark-mahogany);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #e0b85a;
+        }
+
+        /* --- Mobile Nav Toggles --- */
+        .mobile-nav-toggle, .close-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1000;
+            background: var(--panel-burgundy);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close-nav-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            left: auto;
+            font-size: 2.5rem;
+            line-height: 1;
+            border: none;
+            background: transparent;
+            width: auto;
+            height: auto;
+        }
+
+
+        /* --- Specific Page Styling --- */
+        /* --- About Page Author Card Updates --- */
+.author-card {
+    display: flex;
+    align-items: center; /* Vertically align image/name with the text */
+    gap: 1.5rem; /* Space between image/name and description */
+    text-align: left; /* Reset text alignment for the card */
+}
+
+.author-info {
+    text-align: center; /* Center the image and name */
+    flex-shrink: 0; /* Prevent the image/name block from shrinking */
+}
+
+.author-info img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--accent-gold);
+    margin-bottom: 1rem;
+}
+
+.author-bio {
+    margin-bottom: 0; /* Remove default bottom margin from paragraph */
+}
+        /* Home Page */
+        .home-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /*About Me Page*/
+        .quote-section {
+    background-color: rgba(84, 12, 21, 0.5); /* Semi-transparent burgundy */
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+    border: 1px solid #4a0a12;
+    text-align: center;
+}
+
+        /* Blog Page */
+        #blog-filters {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        #blog-filters button {
+            background: none;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #blog-filters button:hover, #blog-filters button.active {
+            background-color: var(--accent-gold);
+            color: var(--bg-dark-mahogany);
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .blog-card {
+            background-color: var(--panel-burgundy);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .blog-card-content { padding: 1.5rem; flex-grow: 1; }
+        
+        .category-tag {
+            display: inline-block;
+            background-color: var(--accent-gold);
+            color: var(--bg-dark-mahogany);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: capitalize;
+            margin-bottom: 0.75rem;
+        }
+
+        .blog-card-content h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .meta-info {
+            font-size: 0.8rem;
+            font-style: italic;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+
+        /* Single Post Page */
+        #single-post .post-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        #single-post .post-title {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+        }
+        #single-post .post-meta {
+            font-style: italic;
+            color: var(--text-ivory);
+        }
+        #single-post .post-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #single-post .post-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Resources Page */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .book-card { text-align: center; }
+        .book-card img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            margin-bottom: 1rem;
+        }
+
+        /* Prayer Page */
+        #psalm-display {
+            background-color: var(--paper-ivory);
+            color: var(--text-whiskey-brown);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        #psalm-display h3 { color: var(--bg-dark-mahogany); }
+        #psalm-display blockquote { font-style: italic; font-size: 1.1rem; }
+
+        .prayer-form { display: flex; flex-direction: column; gap: 1rem; }
+        .prayer-form input, .prayer-form textarea {
+            background-color: #4a0a12;
+            border: 1px solid var(--text-whiskey-brown);
+            padding: 0.75rem;
+            border-radius: 4px;
+            color: var(--text-ivory);
+            font-family: 'Lora', serif;
+        }
+        .prayer-form textarea { min-height: 120px; resize: vertical; }
+        #prayer-form-message {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+        }
+        #prayer-form-message.error {
+            background-color: var(--hover-red);
+            color: var(--paper-ivory);
+        }
+        #prayer-filters {
+            margin: 2rem 0 1rem;
+            text-align: right;
+        }
+        #prayer-filters button {
+             background: none;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        #prayer-filters button.active {
+            background-color: var(--accent-gold);
+            color: var(--bg-dark-mahogany);
+        }
+        #prayer-chain { margin-top: 1rem; }
+        .prayer-request {
+            background-color: var(--panel-burgundy);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-gold);
+        }
+        .prayer-request strong { color: var(--accent-gold); }
+        .prayer-request .timestamp {
+            font-size: 0.8rem;
+            color: var(--text-ivory);
+            opacity: 0.7;
+            text-align: right;
+            margin-top: 1rem;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .home-grid, .authors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: flex;
+            }
+            .close-nav-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+                box-shadow: 10px 0px 30px rgba(0,0,0,0.5);
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+            .hero h1 { font-size: 2.5rem; }
+            #single-post .post-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-nav-toggle" aria-label="Open navigation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo" data-page="home">RT Parlor</span>
+            <button class="close-nav-toggle" aria-label="Close navigation">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a class="nav-link active" data-page="home">Home</a></li>
+                <li><a class="nav-link" data-page="blog">The Reading Room</a></li>
+                <li><a class="nav-link" data-page="resources">The Library</a></li>
+                <li><a class="nav-link" data-page="prayer">Psalm Sunday & Prayer</a></li>
+                <li><a class="nav-link" data-page="about">About R.T. Parlor</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="social-media">
+                <!-- <a href="#" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a> -->
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <section id="home" class="page active">
+            <div class="hero">
+                <h1>Welcome to the RT Parlor</h1>
+                <p>A cozy place for aspiring theologians</p>
+            </div>
+
+            <div class="content-box">
+                <h2>Our Mission</h2>
+                <p>RT Parlor</p>
+            </div>
+
+            <div class="home-grid">
+                <div class="main-column">
+                    <h2>Latest Post</h2>
+                    <div id="latest-post-home" class="blog-card">
+                        </div>
+                </div>
+                <div class="side-column">
+                    <h2>Psalm of the Week</h2>
+                    <div id="psalm-display-home" class="content-box">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="page">
+            <h2>The Reading Room</h2>
+            <div id="blog-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="theology">Systematic Theology</button>
+                <button class="filter-btn" data-filter="history">Church History</button>
+                <button class="filter-btn" data-filter="living">Christian Living</button>
+                <button class="filter-btn active" data-filter="exegesis">Exegesis</button>
+            </div>
+            <div class="blog-grid"></div>
+        </section>
+
+        <section id="single-post" class="page">
+            <a href="#" class="nav-link" data-page="blog">&larr; Back to The Reading Room</a>
+            <div class="post-header">
+                <h1 id="post-title" class="post-title"></h1>
+                <p id="post-meta" class="post-meta"></p>
+            </div>
+            <div id="post-content" class="post-content content-box"></div>
+        </section>
+
+        <section id="resources" class="page">
+             <h2>The Library</h2>
+            <div class="content-box">
+                <p>These are the resources that have shaped our thinking and deepened our faith. We commend them to you for your own study and edification.</p>
+            </div>
+            
+            <h3>Essential Books</h3>
+            <!-- <div class="resources-grid">
+                <div class="book-card">
+                    <img src="https://placehold.co/200x300/f4f8d3/310e1a?text=Institutes" alt="Book Cover">
+                    <h4>Institutes of the Christian Religion</h4>
+                    <p><em>John Calvin</em></p>
+                </div>
+                <div class="book-card">
+                    <img src="https://placehold.co/200x300/f4f8d3/310e1a?text=Knowing+God" alt="Book Cover">
+                    <h4>Knowing God</h4>
+                    <p><em>J.I. Packer</em></p>
+                </div>
+                <div class="book-card">
+                    <img src="https://placehold.co/200x300/f4f8d3/310e1a?text=Reformed+Dogmatics" alt="Book Cover">
+                    <h4>Reformed Dogmatics (Abridged)</h4>
+                    <p><em>Herman Bavinck</em></p>
+                </div>
+                 <div class="book-card">
+                    <img src="https://placehold.co/200x300/f4f8d3/310e1a?text=The+Holiness+of+God" alt="Book Cover">
+                    <h4>The Holiness of God</h4>
+                    <p><em>R.C. Sproul</em></p>
+                </div> -->
+            </div>
+
+            <h3 style="margin-top: 3rem;">Confessions & Creeds</h3>
+            <ul>
+                <!-- <li><a href="" target="_blank" rel="noopener noreferrer">The Westminster Standards</a></li>
+                <li><a href="" target="_blank" rel="noopener noreferrer">The Three Forms of Unity</a></li>
+                <li><a href="" target="_blank" rel="noopener noreferrer">The Apostles' Creed</a></li>
+                <li><a href="" target="_blank" rel="noopener noreferrer">The Nicene Creed</a></li> -->
+            </ul>
+        </section>
+
+        <section id="prayer" class="page">
+            <h2>Psalm Sunday & The Prayer Chain</h2>
+            <div id="psalm-display"></div>
+            <div class="content-box">
+                <h2>The Prayer Chain</h2>
+                <p>Please feel free to share your prayer requests below. We and our readers will commit to praying for you. This list resets every Sunday. "Therefore, confess your sins to one another and pray for one another, that you may be healed. The prayer of a righteous person has great power as it is working." - James 5:16</p>
+                <form id="prayer-form" class="prayer-form">
+                    <input type="text" id="prayer-name" placeholder="Your Name or Initials (Optional)">
+                    <textarea id="prayer-request" placeholder="Enter your prayer request..." required></textarea>
+                    <button type="submit" class="btn">Add to the Chain</button>
+                </form>
+                <div id="prayer-form-message"></div>
+            </div>
+            <div id="prayer-filters">
+                <span>Sort by:</span>
+                <button id="sort-newest" class="active">Newest First</button>
+                <button id="sort-oldest">Oldest First</button>
+            </div>
+            <div id="prayer-chain"></div>
+        </section>
+
+        <section id="about" class="page">
+            <h2>The Authors</h2>
+            <div class="content-box">
+                <h3>RT Parlor</h3>
+                <p>RT Parlor is more than a name; it's a space. In a bygone era, the parlor was a room for conversation, debate, and fellowship. It's in that spirit that we write—not as distant academics, but as fellow travelers inviting you to sit and engage with the timeless truths of our faith, grounded in the rich heritage of the Protestant Reformation.</p>
+            </div>
+            
+            <div class="quote-section">
+                <blockquote>"What is the chief end of man? To glorify God and Enjoy Him forever!"</blockquote>
+                <footer>— Westminster Shorter Catechism Q1</footer>
+            </div>
+
+           <div class="authors-grid">
+    <!-- Richard's Card -->
+    <div class="author-card content-box">
+        <div class="author-info">
+            <img src="https://placehold.co/150x150/f4f8d3/310e1a?text=Richard" alt="Portrait of Richard">
+            <h3>Richard</h3>
+        </div>
+        <p class="author-bio">We declare to you what was from the beginning, what we have heard, what we have seen with our eyes, what we have looked at and touched with our hands, concerning the word of life—this life was revealed, and we have seen it and testify to it and declare to you the eternal life that was with the Father and was revealed to us—we declare to you what we have seen and heard so that you also may have fellowship with us, and truly our fellowship is with the Father and with his Son Jesus Christ. We are writing these things so that our joy may be complete.</p>
+    </div>
+    <!-- Ten's Card -->
+    <div class="author-card content-box">
+        <div class="author-info">
+            <img src="https://placehold.co/150x150/f4f8d3/310e1a?text=Ten" alt="Portrait of Ten">
+            <h3>Ten</h3>
+        </div>
+        <p class="author-bio">This is the message we have heard from him and proclaim to you, that God is light and in him there is no darkness at all. If we say that we have fellowship with him while we are walking in darkness, we lie and do not do what is true; but if we walk in the light as he himself is in the light, we have fellowship with one another, and the blood of Jesus his Son cleanses us from all sin. If we say that we have no sin, we deceive ourselves, and the truth is not in us. If we confess our sins, he who is faithful and just will forgive us our sins and cleanse us from all unrighteousness. If we say that we have not sinned, we make him a liar, and his word is not in us.</p>
+    </div>
+</div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Page Navigation ---
+            const navLinks = document.querySelectorAll('.nav-link, .logo');
+            const pages = document.querySelectorAll('.page');
+
+            function navigateTo(pageId) {
+                pages.forEach(page => page.classList.remove('active'));
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('active');
+                    }
+                });
+                window.scrollTo(0, 0);
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.page;
+                    navigateTo(pageId);
+                });
+            });
+
+            // --- Mobile Navigation Toggle ---
+            const sidebar = document.querySelector('.sidebar');
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            const closeNavToggle = document.querySelector('.close-nav-toggle');
+            const navLinksForMobile = document.querySelectorAll('.sidebar-nav a, .logo');
+
+            mobileNavToggle.addEventListener('click', () => {
+                sidebar.classList.add('open');
+            });
+
+            closeNavToggle.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+            });
+
+            // Close sidebar when a link is clicked on mobile
+            navLinksForMobile.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            });
+
+            // --- Blog Post Data ---
+            const blogPosts = [
+                { 
+                    id: 0,
+                    title: 'Types of Theology', 
+                    author: 'Richard',
+                    date: 'August 22, 2025',
+                    category: 'theology', 
+                    excerpt: 'What are the different types of theology?',
+                    content: `
+                        <p>Just believe in Jesus Bro</p>
+                        <p>Ten is a heretic</p>
+                    `
+                },
+                { 
+                    id: 1,
+                    title: 'Why Cooper is cool', 
+                    author: 'Ten',
+                    date: 'August 15, 2025',
+                    category: 'history', 
+                    excerpt: 'Exploring the pivotal meeting between Ten and Cooper that changed the world.',
+                    content: `
+                        <p>We actually don't like each other.</p>
+                        <p>We pretend to like each other..</p>
+                        <p>Here's 1 John 1: We declare to you what was from the beginning, what we have heard, what we have seen with our eyes, what we have looked at and touched with our hands, concerning the word of life—this life was revealed, and we have seen it and testify to it and declare to you the eternal life that was with the Father and was revealed to us—we declare to you what we have seen and heard so that you also may have fellowship with us, and truly our fellowship is with the Father and with his Son Jesus Christ. We are writing these things so that our joy may be complete. This is the message we have heard from him and proclaim to you, that God is light and in him there is no darkness at all. If we say that we have fellowship with him while we are walking in darkness, we lie and do not do what is true; but if we walk in the light as he himself is in the light, we have fellowship with one another, and the blood of Jesus his Son cleanses us from all sin. If we say that we have no sin, we deceive ourselves, and the truth is not in us. If we confess our sins, he who is faithful and just will forgive us our sins and cleanse us from all unrighteousness. If we say that we have not sinned, we make him a liar, and his word is not in us..</p>
+                    `
+                },
+                { 
+                    id: 2,
+                    title: 'Why Richard needs a break', 
+                    author: 'Richard',
+                    date: 'August 8, 2025',
+                    category: 'living', 
+                    excerpt: 'He works like a dog day and night.',
+                    content: `
+                        <p>Our world is defined by hustle. We are constantly connected, constantly working, constantly available. As a result, Richard needs a Sabbath every day and should dilly dally like me.</p>
+                        <p>We should just become monks and live care free lives</p>
+                    `
+                },
+                {
+                    id: 3,
+                    title: '1 Peter 3:21 Exegesis',
+                    author: 'Ten',
+                    date: 'August 28, 2025',
+                    category: 'exegesis',
+                    excerpt: 'The question plauging the very minds of modern evangelicalism is whether or not baptism saves.',
+                    content: `<p>   Throughout Christianity one thing has remained present, baptism saves. This was a nearly undisputed doctrine up till the Anabaptists questioned a core belief and means of grace instituted by Jesus Christ. There are multiple viewpoints that must be addressed that cannot be due to time constraints such as regeneration preceding faith, and because this is an exegetical study of 1 Peter 3:21.</p>
+                    <p>     The context for 1 Peter 3:21 is that we need to do what is good and be ready to make a defense for our faith. Peter also described how Christ suffered for us. Verse 20 says that “oktō psychai diesōthēsan di’ hydatos” or “eight souls were saved through water.” Verse 21 says “ho kai hymas antitypon nyn sōzei baptisma ou sarkos apotheosis rhypou alla syneidēseōs agathēs eperōtēma eis Theon di’ anastaseōs Iēsou Christou” or “baptism, which this prefigured, now saves you—not as a removal of dirt from the body but as an appeal to God for a good conscience, through the resurrection of Jesus Christ…” Eight souls were saved, and through this , prefigured or corresponded to baptism, which now saves us. Peter is drawing parallels between the waters of Noah’s ark and the waters of baptism. </p>
+                    <p>     Many point to “ou sarkos apotheosis rhypou alla syneidēseōs agathēs eperōtēma eis Theon” or “not as a removal of dirt from the body but as an appeal to God for a good conscience” but the term rhypou is a metaphorical term used to describe moral impurity, and this was associated with religious and moral purity. The term syneidēseōs refers to the concept of an inner conscience, or a heart, where the conscience judges their actions and reflects the divine law written on their hearts. This is a way to cleanse any past sins, and to receive the Holy Spirit (Titus 3:5-7). The power granted to forgive sins, however, was granted because of the death and resurrection of Jesus Christ. It is not the water in it of itself that saves, but the promise of the Holy Spirit attached to it that does.</p>
+                    <p>     In summary, in the same way Noah and his family were saved by the waters of the flood, we are now saved by the waters of baptism to receive the Holy Spirit because of the resurrection of Christ.</p>
+                    `
+                }
+            ];
+
+            const blogGrid = document.querySelector('.blog-grid');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const latestPostHome = document.getElementById('latest-post-home');
+
+            function displayPosts(filter = 'all') {
+                blogGrid.innerHTML = '';
+                const filteredPosts = (filter === 'all') ? blogPosts : blogPosts.filter(post => post.category === filter);
+                
+                filteredPosts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.classList.add('blog-card');
+                    postElement.dataset.id = post.id;
+                    postElement.innerHTML = `
+                        <div class="blog-card-content">
+                            <span class="category-tag">${post.category.replace('-', ' ')}</span>
+                            <h4>${post.title}</h4>
+                            <p class="meta-info">${post.author} &bull; ${post.date}</p>
+                            <p class="excerpt">${post.excerpt}</p>
+                        </div>
+                    `;
+                    postElement.addEventListener('click', () => showPost(post.id));
+                    blogGrid.appendChild(postElement);
+                });
+            }
+
+            function showPost(id) {
+                const post = blogPosts.find(p => p.id === id);
+                if (!post) return;
+                document.getElementById('post-title').innerText = post.title;
+                document.getElementById('post-meta').innerText = `By ${post.author} on ${post.date}`;
+                document.getElementById('post-content').innerHTML = post.content;
+                navigateTo('single-post');
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    displayPosts(button.dataset.filter);
+                });
+            });
+            
+            function displayLatestPostOnHome() {
+                if (blogPosts.length > 0) {
+                    const latestPost = blogPosts[0];
+                    latestPostHome.dataset.id = latestPost.id;
+                    latestPostHome.innerHTML = `
+                        <div class="blog-card-content">
+                             <span class="category-tag">${latestPost.category.replace('-', ' ')}</span>
+                            <h4>${latestPost.title}</h4>
+                             <p class="meta-info">${latestPost.author} &bull; ${latestPost.date}</p>
+                            <p class="excerpt">${latestPost.excerpt}</p>
+                            <a href="#" class="btn" data-id="${latestPost.id}">Continue Reading &rarr;</a>
+                        </div>
+                    `;
+                    latestPostHome.querySelector('.btn').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        showPost(latestPost.id);
+                    });
+                }
+            }
+
+            // Initial displays
+            displayPosts();
+            displayLatestPostOnHome();
+
+            // --- Psalm of the Week ---
+            const psalms = [
+                { ref: "Psalm 1:1-2", text: "Blessed is the man who walks not in the counsel of the wicked, nor stands in the way of sinners, nor sits in the seat of scoffers; but his delight is in the law of the LORD, and on his law he meditates day and night." },
+                { ref: "Psalm 19:1", text: "The heavens declare the glory of God, and the sky above proclaims his handiwork." },
+                { ref: "Psalm 23:1-2", text: "The LORD is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters." },
+                { ref: "Psalm 27:1", text: "The LORD is my light and my salvation; whom shall I fear? The LORD is the stronghold of my life; of whom shall I be afraid?" },
+                { ref: "Psalm 46:1", text: "God is our refuge and strength, a very present help in trouble." },
+                { ref: "Psalm 90:2", text: "Before the mountains were brought forth, or ever you had formed the earth and the world, from everlasting to everlasting you are God." },
+                { ref: "Psalm 121:1-2", text: "I lift up my eyes to the hills. From where does my help come? My help comes from the LORD, who made heaven and earth." }
+            ];
+
+            function getWeekNumber(d) {
+                d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+                var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+                var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+                return weekNo;
+            }
+
+            const today = new Date();
+            const weekNumber = getWeekNumber(today);
+            const psalmIndex = weekNumber % psalms.length;
+            const weeklyPsalm = psalms[psalmIndex];
+            
+            const psalmHTML = `
+                <h3>${weeklyPsalm.ref}</h3>
+                <blockquote>"${weeklyPsalm.text}"</blockquote>
+            `;
+            
+            document.getElementById('psalm-display').innerHTML = psalmHTML;
+            document.getElementById('psalm-display-home').innerHTML = psalmHTML;
+
+            // --- PRAYER CHAIN LOGIC (UPDATED) ---
+            const prayerForm = document.getElementById('prayer-form');
+            const prayerChainDiv = document.getElementById('prayer-chain');
+            const prayerFormMessage = document.getElementById('prayer-form-message');
+            const sortNewestBtn = document.getElementById('sort-newest');
+            const sortOldestBtn = document.getElementById('sort-oldest');
+
+            // Function to get prayers from localStorage
+            const getPrayers = () => {
+                const prayers = localStorage.getItem('rtp_prayers');
+                return prayers ? JSON.parse(prayers) : [];
+            };
+
+            // Function to save prayers to localStorage
+            const savePrayers = (prayers) => {
+                localStorage.setItem('rtp_prayers', JSON.stringify(prayers));
+            };
+
+            // Function to render prayers to the page
+            const renderPrayers = (sortOrder = 'newest') => {
+                prayerChainDiv.innerHTML = '';
+                const prayers = getPrayers();
+                
+                if (prayers.length === 0) {
+                    prayerChainDiv.innerHTML = '<p style="text-align: center;">No prayer requests yet this week.</p>';
+                    return;
+                }
+
+                // Sort the prayers based on timestamp
+                prayers.sort((a, b) => {
+                    if (sortOrder === 'newest') {
+                        return b.timestamp - a.timestamp; // Descending
+                    } else {
+                        return a.timestamp - b.timestamp; // Ascending
+                    }
+                });
+
+                prayers.forEach(prayer => {
+                    const prayerEl = document.createElement('div');
+                    prayerEl.classList.add('prayer-request');
+                    const date = new Date(prayer.timestamp).toLocaleString();
+                    prayerEl.innerHTML = `
+                        <p><strong>From ${prayer.name}:</strong></p>
+                        <p>${prayer.request}</p>
+                        <p class="timestamp">${date}</p>
+                    `;
+                    prayerChainDiv.appendChild(prayerEl);
+                });
+            };
+
+            // Weekly Reset Logic
+            const checkWeeklyReset = () => {
+                const today = new Date();
+                const lastResetStr = localStorage.getItem('rtp_last_reset');
+                
+                // If today is Sunday (day 0)
+                if (today.getDay() === 0) {
+                    const lastReset = lastResetStr ? new Date(lastResetStr) : null;
+                    
+                    // If there's no last reset date, or if the last reset was before today
+                    if (!lastReset || lastReset.toDateString() !== today.toDateString()) {
+                        savePrayers([]); // Clear prayers
+                        localStorage.setItem('rtp_last_reset', today.toISOString());
+                        console.log('Prayer requests have been reset for the week.');
+                    }
+                }
+            };
+            
+            // Handle Form Submission
+            prayerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const lastSubmission = localStorage.getItem('rtp_last_submission');
+                const now = new Date().getTime();
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                // Check if a submission was made in the last 24 hours
+                if (lastSubmission && (now - lastSubmission < twentyFourHours)) {
+                    prayerFormMessage.textContent = 'You may only submit one prayer request per day. Please try again later.';
+                    prayerFormMessage.className = 'error';
+                    prayerFormMessage.style.display = 'block';
+                    return;
+                }
+
+                const name = document.getElementById('prayer-name').value.trim() || 'Anonymous';
+                const request = document.getElementById('prayer-request').value.trim();
+
+                const newPrayer = {
+                    name: name,
+                    request: request,
+                    timestamp: now
+                };
+
+                const prayers = getPrayers();
+                prayers.push(newPrayer);
+                savePrayers(prayers);
+
+                // Record the submission time
+                localStorage.setItem('rtp_last_submission', now);
+
+                // Clear form and hide message
+                prayerForm.reset();
+                prayerFormMessage.style.display = 'none';
+                
+                // Re-render prayers with the newest one on top
+                sortNewestBtn.click();
+            });
+
+            // Handle Sorting
+            sortNewestBtn.addEventListener('click', () => {
+                renderPrayers('newest');
+                sortNewestBtn.classList.add('active');
+                sortOldestBtn.classList.remove('active');
+            });
+
+            sortOldestBtn.addEventListener('click', () => {
+                renderPrayers('oldest');
+                sortOldestBtn.classList.add('active');
+                sortNewestBtn.classList.remove('active');
+            });
+            
+            // Initial setup for the prayer page
+            checkWeeklyReset();
+            renderPrayers();
+
+        });
+    </script>
+</body>
+</ht
